@@ -1,0 +1,40 @@
+version: "2"
+services:
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    ports:
+      - 1883:1883
+    networks:
+      - fogserver-net
+  timescaledb:
+    image: timescale/timescaledb:latest-pg12
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_DB=hc_monitor
+    command: postgres -c config_file=/configFolder/postgresql.conf
+    volumes:
+      - data:/var/lib/postgresql/data
+      - ./timescaledb:/configFolder
+    ports:
+      - 5432:5432
+    networks:
+      - fogserver-net
+  healthcaresys_fog:
+    build: ./fog_server
+    command: python ./fog_python/main.py
+    volumes:
+      - ./fog_server/fog_python/
+    depends_on:
+      - mosquitto
+      - timescaledb
+    networks:
+      - fogserver-net
+  
+networks:
+  fogserver-net:
+volumes:
+  data:
