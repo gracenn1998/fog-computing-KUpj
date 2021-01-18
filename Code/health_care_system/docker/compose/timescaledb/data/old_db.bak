@@ -1,0 +1,407 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 11.6
+-- Dumped by pg_dump version 11.6
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: timescaledb; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS timescaledb WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION timescaledb; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION timescaledb IS 'Enables scalable inserts and complex queries for time-series data';
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: device_types; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.device_types (
+    dtype_id integer NOT NULL,
+    dtype_name character varying
+);
+
+
+ALTER TABLE public.device_types OWNER TO postgres;
+
+--
+-- Name: device_types_dtype_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.device_types_dtype_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.device_types_dtype_id_seq OWNER TO postgres;
+
+--
+-- Name: device_types_dtype_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.device_types_dtype_id_seq OWNED BY public.device_types.dtype_id;
+
+
+--
+-- Name: devices; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.devices (
+    device_id integer NOT NULL,
+    dtype_id integer NOT NULL
+);
+
+
+ALTER TABLE public.devices OWNER TO postgres;
+
+--
+-- Name: devices_device_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.devices_device_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.devices_device_id_seq OWNER TO postgres;
+
+--
+-- Name: devices_device_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.devices_device_id_seq OWNED BY public.devices.device_id;
+
+
+--
+-- Name: devices_dtype_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.devices_dtype_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.devices_dtype_id_seq OWNER TO postgres;
+
+--
+-- Name: devices_dtype_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.devices_dtype_id_seq OWNED BY public.devices.dtype_id;
+
+
+--
+-- Name: patients; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.patients (
+    patient_id integer NOT NULL,
+    name character varying
+);
+
+
+ALTER TABLE public.patients OWNER TO postgres;
+
+--
+-- Name: patients_patient_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.patients_patient_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.patients_patient_id_seq OWNER TO postgres;
+
+--
+-- Name: patients_patient_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.patients_patient_id_seq OWNED BY public.patients.patient_id;
+
+
+--
+-- Name: sensor_reading; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.sensor_reading (
+    "time" timestamp with time zone NOT NULL,
+    patient_id integer NOT NULL,
+    sensortype_id integer NOT NULL,
+    device_id integer NOT NULL,
+    value jsonb
+);
+
+
+ALTER TABLE public.sensor_reading OWNER TO postgres;
+
+--
+-- Name: sensor_reading_device_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.sensor_reading_device_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.sensor_reading_device_id_seq OWNER TO postgres;
+
+--
+-- Name: sensor_reading_device_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.sensor_reading_device_id_seq OWNED BY public.sensor_reading.device_id;
+
+
+--
+-- Name: sensor_reading_patient_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.sensor_reading_patient_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.sensor_reading_patient_id_seq OWNER TO postgres;
+
+--
+-- Name: sensor_reading_patient_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.sensor_reading_patient_id_seq OWNED BY public.sensor_reading.patient_id;
+
+
+--
+-- Name: sensor_reading_sensortype_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.sensor_reading_sensortype_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.sensor_reading_sensortype_id_seq OWNER TO postgres;
+
+--
+-- Name: sensor_reading_sensortype_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.sensor_reading_sensortype_id_seq OWNED BY public.sensor_reading.sensortype_id;
+
+
+--
+-- Name: sensor_types; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.sensor_types (
+    stype_id integer NOT NULL,
+    stype_name character varying
+);
+
+
+ALTER TABLE public.sensor_types OWNER TO postgres;
+
+--
+-- Name: sensor_types_stype_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.sensor_types_stype_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.sensor_types_stype_id_seq OWNER TO postgres;
+
+--
+-- Name: sensor_types_stype_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.sensor_types_stype_id_seq OWNED BY public.sensor_types.stype_id;
+
+
+--
+-- Name: device_types dtype_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.device_types ALTER COLUMN dtype_id SET DEFAULT nextval('public.device_types_dtype_id_seq'::regclass);
+
+
+--
+-- Name: devices device_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.devices ALTER COLUMN device_id SET DEFAULT nextval('public.devices_device_id_seq'::regclass);
+
+
+--
+-- Name: devices dtype_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.devices ALTER COLUMN dtype_id SET DEFAULT nextval('public.devices_dtype_id_seq'::regclass);
+
+
+--
+-- Name: patients patient_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.patients ALTER COLUMN patient_id SET DEFAULT nextval('public.patients_patient_id_seq'::regclass);
+
+
+--
+-- Name: sensor_reading patient_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sensor_reading ALTER COLUMN patient_id SET DEFAULT nextval('public.sensor_reading_patient_id_seq'::regclass);
+
+
+--
+-- Name: sensor_reading sensortype_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sensor_reading ALTER COLUMN sensortype_id SET DEFAULT nextval('public.sensor_reading_sensortype_id_seq'::regclass);
+
+
+--
+-- Name: sensor_reading device_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sensor_reading ALTER COLUMN device_id SET DEFAULT nextval('public.sensor_reading_device_id_seq'::regclass);
+
+
+--
+-- Name: sensor_types stype_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sensor_types ALTER COLUMN stype_id SET DEFAULT nextval('public.sensor_types_stype_id_seq'::regclass);
+
+
+--
+-- Name: device_types device_types_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.device_types
+    ADD CONSTRAINT device_types_pkey PRIMARY KEY (dtype_id);
+
+
+--
+-- Name: devices devices_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.devices
+    ADD CONSTRAINT devices_pkey PRIMARY KEY (device_id);
+
+
+--
+-- Name: patients patients_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.patients
+    ADD CONSTRAINT patients_pkey PRIMARY KEY (patient_id);
+
+
+--
+-- Name: sensor_reading sensor_reading_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sensor_reading
+    ADD CONSTRAINT sensor_reading_pkey PRIMARY KEY ("time", patient_id, sensortype_id, device_id);
+
+
+--
+-- Name: sensor_types sensor_types_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sensor_types
+    ADD CONSTRAINT sensor_types_pkey PRIMARY KEY (stype_id);
+
+
+--
+-- Name: devices devices_dtype_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.devices
+    ADD CONSTRAINT devices_dtype_id_fkey FOREIGN KEY (dtype_id) REFERENCES public.device_types(dtype_id);
+
+
+--
+-- Name: sensor_reading sensor_reading_device_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sensor_reading
+    ADD CONSTRAINT sensor_reading_device_id_fkey FOREIGN KEY (device_id) REFERENCES public.devices(device_id);
+
+
+--
+-- Name: sensor_reading sensor_reading_patient_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sensor_reading
+    ADD CONSTRAINT sensor_reading_patient_id_fkey FOREIGN KEY (patient_id) REFERENCES public.patients(patient_id);
+
+
+--
+-- Name: sensor_reading sensor_reading_sensortype_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sensor_reading
+    ADD CONSTRAINT sensor_reading_sensortype_id_fkey FOREIGN KEY (sensortype_id) REFERENCES public.sensor_types(stype_id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
