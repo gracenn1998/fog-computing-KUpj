@@ -1,12 +1,9 @@
-# Project Title
+# Data processing system in fog-based architecture
 
-Data processing system in fog-based architecture
-
-## Target
-
-Collect data (by using M5Stack microcontroller)
-Design the database structure
-Develop algorithms for processing data
+Data processing system in fog-based architecture, includes the study for:
+- Collecting data (by using M5Stack microcontroller)
+- Designing the database structure
+- Developing algorithms for processing data
 
 
 ### Applied technologies studying
